@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Day to Night</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: skyblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    padding: 14px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#playBtn {
+    background: #0077ff;
+    color: white;
+}
+
+#nightBtn {
+    background: #222;
+    color: white;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+    <button id="playBtn">▶ Play Music</button>
+    <button id="nightBtn">🌙 Switch to Night</button>
+</div>
+
+<audio id="music">
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const playBtn = document.getElementById("playBtn");
+const nightBtn = document.getElementById("nightBtn");
+const music = document.getElementById("music");
+
+playBtn.onclick = () => {
+    music.play();
+    playBtn.style.display = "none";
+    nightBtn.style.display = "inline-block";
+};
+
+nightBtn.onclick = () => {
+    const nightTab = window.open("", "_blank");
+
+    nightTab.document.write(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Night Sky</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {margin: 0; padding: 0; box-sizing: border-box;}
+
+body {
+    height: 100vh;
+    background: black;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+#nightSlide {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 🌙 Moon Animation */
+.moon {
+    position: absolute;
+    top: 100vh; /* start off-screen */
+    right: 100px;
+    width: 120px;
+    height: 120px;
+    background: #f5f3ce;
+    border-radius: 50%;
+    box-shadow: 0 0 50px rgba(255,255,255,0.7);
+    animation: moonRise 3s ease-out forwards, moonGlow 4s infinite ease-in-out;
+}
+
+@keyframes moonRise {
+    0% { top: 100vh; opacity: 0; }
+    100% { top: 40px; opacity: 1; }
+}
+
+@keyframes moonGlow {
+    0%, 100% { box-shadow: 0 0 40px rgba(255,255,255,0.6); }
+    50% { box-shadow: 0 0 80px rgba(255,255,255,0.9); }
+}
+
+/* 🌠 "Good Night" Animation */
+.good-night {
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: textFadeIn 3s ease-out forwards;
+}
+
+@keyframes textFadeIn {
+    0% { opacity: 0; transform: translateY(-60%) scale(0.8); }
+    60% { opacity: 1; transform: translateY(-55%) scale(1.05); }
+    100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+
+/* 🌟 Star and Falling Star Effects */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.falling-star {
+    position: absolute;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(white, transparent);
+    opacity: 0.8;
+    animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100px) translateX(0); opacity: 1; }
+    100% { transform: translateY(600px) translateX(-200px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="nightSlide">
+    <div class="moon"></div>
+    <div class="good-night">Good Night 🌙</div>
+</div>
+
+<script>
+const nightSlide = document.getElementById("nightSlide");
+
+// Create twinkling stars
+for (let i = 0; i < 120; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    const size = Math.random() * 3;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    nightSlide.appendChild(star);
+}
+
+// Random falling stars
+setInterval(() => {
+    const fs = document.createElement("div");
+    fs.className = "falling-star";
+    fs.style.left = Math.random() * 100 + "vw";
+    fs.style.top = "-100px";
+    nightSlide.appendChild(fs);
+    setTimeout(() => fs.remove(), 2000);
+}, 1200);
+<\/script>
+
+</body>
+</html>
+`);
+};
+</script>
+
+</body>
+</html>
